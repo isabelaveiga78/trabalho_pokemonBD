@@ -3,9 +3,8 @@ import pymysql
 import pandas as pd
 import base64
 import os
-import plotly.express as px  # <--- ESSA LINHA ESTAVA FALTANDO
+import plotly.express as px
 
-# --- 1. CONFIGURAÇÃO DA PÁGINA ---
 st.set_page_config(
     page_title="Caracterização Pokémon", 
     page_icon="◓",
@@ -13,7 +12,6 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# --- 2. CARREGAR FONTE COOLVETICA ---
 def carregar_fonte_local(caminho_arquivo):
     if os.path.exists(caminho_arquivo):
         with open(caminho_arquivo, "rb") as f:
@@ -32,7 +30,6 @@ def carregar_fonte_local(caminho_arquivo):
 css_fonte = carregar_fonte_local("coolvetica.otf")
 st.markdown(css_fonte, unsafe_allow_html=True)
 
-# --- CARREGAR IMAGEM DA POKEBOLA ---
 def codificar_imagem_base64(caminho_arquivo):
     if os.path.exists(caminho_arquivo):
         with open(caminho_arquivo, "rb") as f:
@@ -43,12 +40,10 @@ def codificar_imagem_base64(caminho_arquivo):
 
 img_pokeball_base64 = codificar_imagem_base64("pokeball.png")
 
-# --- 3. CSS GLOBAL (INCLUINDO O TEMA DO CÓDIGO) ---
 st.markdown(f"""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
 
-/* --- Novo Pokeball Marca D'água (Baseado em Imagem) --- */
 .pokeball-bg-final {{ 
     position: absolute;
     right: -250px;
@@ -67,15 +62,14 @@ st.markdown(f"""
     --bg-color: #F8FAFC;
     --text-main: #1E293B;       
     --text-light: #64748B;      
-    --card-bg: #FFFFFF;       
+    --card-bg: #FFFFFF;        
     --red-pk: #DC2626;            
     --cherry-pk: #CC0000;            
-    --yellow-pk: #FFDE00;       
-    --blue-pk: #2563EB;       
-    --gold-pk: #B3A125;       
+    --yellow-pk: #FFDE00;        
+    --blue-pk: #2563EB;        
+    --gold-pk: #B3A125;        
     --chumbo: #374151;
     
-    /* 5 Cores da Faixa */
     --fs-1: #FF0000;
     --fs-2: #CC0000;
     --fs-3: #3B4CCA;
@@ -89,7 +83,6 @@ st.markdown(f"""
     font-family: 'Coolvetica', sans-serif !important;
 }}
 
-/* Ajuste de Topo */
 .block-container {{
     padding-top: 2rem !important; 
     padding-left: 4rem !important; 
@@ -97,7 +90,6 @@ st.markdown(f"""
     max-width: 100% !important;
 }}
 
-/* Faixa Lateral Fixa */
 .fixed-sidebar {{
     position: fixed;
     left: 0;
@@ -114,7 +106,6 @@ st.markdown(f"""
 .fs-4 {{ flex: 1; background-color: var(--fs-4); }}
 .fs-5 {{ flex: 1; background-color: var(--fs-5); }}
 
-/* Estilo das Abas */
 .stTabs [data-baseweb="tab-list"] {{
     gap: 8px; 
     border-bottom: 1px solid #E2E8F0;
@@ -145,14 +136,12 @@ st.markdown(f"""
 
 h1, h2, h3 {{ 
     font-family: 'Coolvetica', sans-serif !important; 
-    font-weight: 400 !important; /* Remove o negrito forçado do Streamlit */
-    letter-spacing: 1px; /* Dá um respiro entre as letras */
-    -webkit-text-stroke: 0px !important; /* Garante que não tenha borda extra */
-    text-shadow: none !important; /* Remove sombras se houver */
+    font-weight: 400 !important;
+    letter-spacing: 1px;
+    -webkit-text-stroke: 0px !important;
+    text-shadow: none !important;
 }}
 
-
-/* --- ESTILOS DA CAPA --- */
 .titulo-capa {{
     font-family: 'Coolvetica', sans-serif !important;
     color: var(--cherry-pk) !important;
@@ -175,21 +164,16 @@ h1, h2, h3 {{
 a {{ color: var(--blue-pk) !important; text-decoration: none; }}
 .stDataFrame, code {{ font-family: Consolas, monospace !important; }}
 
-/* --- COLORIZAÇÃO DE CÓDIGO (TEMA POKÉMON) --- */
-
-/* Força o fundo do bloco de código para branco e texto preto */
 .stCodeBlock, .stCodeBlock > div, .stCodeBlock code {{
     background-color: #ffffff !important;
-    color: #000000 !important; /* Texto Base Preto */
+    color: #000000 !important;
 }}
 
-/* Keywords (SELECT, FROM, CREATE, WHERE) -> AZUL */
 code[class*="language-"] .token.keyword {{
     color: #3B4CCA !important;
     font-weight: bold !important;
 }}
 
-/* Funções e Classes (COUNT, INT, VARCHAR) -> Cherry */
 code[class*="language-"] .token.function, 
 code[class*="language-"] .token.class-name, 
 code[class*="language-"] .token.builtin {{
@@ -197,31 +181,25 @@ code[class*="language-"] .token.builtin {{
     font-weight: bold !important;
 }}
 
-/* Strings (Texto entre aspas) -> Dourado */
 code[class*="language-"] .token.string {{
     color: #B3A125 !important;
 }}
 
-/* Números -> Vermelho Escuro */
 code[class*="language-"] .token.number {{
     color: #FF0000 !important;
 }}
 
-/* Operadores e Pontuação (=, >, ;) -> Azul */
 code[class*="language-"] .token.operator,
 code[class*="language-"] .token.punctuation {{
     color: #3B4CCA !important;
 }}
 
-/* Comentários -> Cinza */
 code[class*="language-"] .token.comment {{
     color: #9ca3af !important;
 }}
-
 </style>
 """, unsafe_allow_html=True)
 
-# --- 4. HTML DA BARRA LATERAL ---
 st.markdown("""
 <div class="fixed-sidebar">
 <div class="fs-1"></div>
@@ -232,7 +210,6 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# --- 5. DADOS (FINAL MESMO - SEM LIMITES NA ELITE) ---
 CONSULTAS_INFO = {
     "Catálogo Completo": {
         "subtitulo": "Uma lista geral unindo as principais informações: Nome, onde vive (Região) e qual seu elemento (Tipo).",
@@ -244,7 +221,6 @@ CONSULTAS_INFO = {
     },
     "A Elite (Acima da Média)": {
         "subtitulo": "Filtramos apenas os Pokémons que possuem Ataque superior à média global de todos os registros.",
-        # TIREI O 'LIMIT 50' DAQUI:
         "sql": "SELECT Nome, Ataque FROM Pokemon WHERE Ataque > (SELECT AVG(Ataque) FROM Pokemon) ORDER BY Ataque DESC"
     },
     "Exemplos de Cada Elemento": {
@@ -271,7 +247,14 @@ CONSULTAS_INFO = {
 
 def get_data(query):
     try:
-        conn = pymysql.connect(host="localhost", user="root", password="", database="trabalho_pokemon", cursorclass=pymysql.cursors.DictCursor)
+        conn = pymysql.connect(
+            host=st.secrets["db_host"],
+            user=st.secrets["db_user"],
+            password=st.secrets["db_password"],
+            database=st.secrets["db_name"],
+            port=4000,
+            cursorclass=pymysql.cursors.DictCursor
+        )
         cursor = conn.cursor()
         cursor.execute(query)
         data = cursor.fetchall()
@@ -281,7 +264,6 @@ def get_data(query):
         st.error(f"Erro de Conexão: {e}")
         return pd.DataFrame()
 
-# --- 6. LAYOUT ---
 tab1, tab2, tab3, tab4, tab5 = st.tabs([
     "INÍCIO", 
     "CONSULTAS", 
@@ -290,13 +272,11 @@ tab1, tab2, tab3, tab4, tab5 = st.tabs([
     "MODELO FÍSICO"
 ])
 
-# --- ABA 1: INÍCIO ---
 with tab1:
     st.markdown("""
     <div class="pokeball-bg-final"></div> 
     """, unsafe_allow_html=True)
     
-    # Título
     st.markdown("""
     <div style="position: relative; z-index: 1; margin-top: 40px;">
     <h1 class="titulo-capa">CARACTERIZAÇÃO DE POKÉMON</h1>
@@ -304,7 +284,6 @@ with tab1:
     </div>
     """, unsafe_allow_html=True)
 
-    # ESPAÇADOR GRANDE PARA EMPURRAR CONTEÚDO PARA BAIXO
     st.markdown("<br><br><br>", unsafe_allow_html=True)
 
     c1, c2, c3 = st.columns([1, 1, 2], gap="small") 
@@ -340,8 +319,6 @@ with tab1:
         </div>
         """, unsafe_allow_html=True)
 
-
-# --- ABA 2: CONSULTAS ---
 with tab2:
     col_nav, col_content = st.columns([1, 3])
     with col_nav:
@@ -352,11 +329,8 @@ with tab2:
         sql_atual = dados["sql"]
         subtitulo = dados["subtitulo"]
 
-        # Título Principal (Já estava em Cherry)
         st.markdown(f"<h1 style='font-size: 2.5rem; color: #CC0000 !important; border: none; margin-bottom: 10px;'>{escolha_menu.upper()}</h1>", unsafe_allow_html=True)
         
-        # --- MUDANÇA AQUI: Subtítulo com "OBJETIVO" em Azul ---
-        # Usamos HTML para colorir apenas a palavra "OBJETIVO:" com o azul da paleta (#3B4CCA)
         st.markdown(f"<p style='font-size: 1.1rem;'><span style='color: #3B4CCA; font-weight: bold;'>OBJETIVO:</span> {subtitulo}</p>", unsafe_allow_html=True)
         df = get_data(sql_atual)
         
@@ -367,48 +341,34 @@ with tab2:
                 st.markdown("###### CÓDIGO SQL EXECUTADO:")
                 st.code(sql_atual, language="sql")
             
-            # --- LÓGICA DE GRÁFICOS COM PLOTLY (CORRIGIDA) ---
-            # --- LÓGICA DE GRÁFICOS COM PLOTLY (ATUALIZADA PARA TOP 10 COLORIDO) ---
-            # --- LÓGICA DE GRÁFICOS COM PLOTLY (PADRÃO: BARRAS COLORIDAS + TEXTO DENTRO) ---
-            # --- LÓGICA DE GRÁFICOS COM PLOTLY (ATUALIZADA: CATÁLOGO COM TREEMAP) ---
-            # --- LÓGICA DE GRÁFICOS COM PLOTLY (ATUALIZADA: CATÁLOGO COM TREEMAP MELHORADO) ---
-            # --- LÓGICA DE GRÁFICOS COM PLOTLY (FINAL: TREEMAP AJUSTADO) ---
-            # --- LÓGICA DE GRÁFICOS COM PLOTLY (FINAL: TREEMAP SEM AMARELO FORTE) ---
-            # --- LÓGICA DE GRÁFICOS COM PLOTLY (FINAL: PALETA EXTENDIDA SEM ROXO) ---
             with t1:
-                # Paleta Padrão para gráficos gerais
                 CORES_POKEMON = ['#CC0000', '#3B4CCA', '#B3A125', '#FFDE00', '#1E293B']
                 fig = None
                 
-                # 1. CASO ESPECIAL: CATÁLOGO (Treemap)
                 if "Catálogo" in escolha_menu:
-                    # NOVA PALETA DO TREEMAP (Expandida para não repetir)
-                    # Removemos o Roxo e adicionamos Laranja e Verde
                     CORES_TREEMAP = [
-                        '#CC0000', # Cherry (Vermelho)
-                        '#1E293B', # Chumbo (Escuro)
-                        '#B3A125', # Gold (Mostarda)
-                        '#3B4CCA', # Azul Royal
-                        '#D97706', # LARANJA (Novo! Ótimo contraste)
-                        '#15803D', # VERDE (Novo! Para variar)
-                        '#0284C7'  # Azul Claro (Para diferenciar Galar/Kalos)
+                        '#CC0000', 
+                        '#1E293B', 
+                        '#B3A125', 
+                        '#3B4CCA', 
+                        '#D97706', 
+                        '#15803D', 
+                        '#0284C7'  
                     ]
                     
                     fig = px.treemap(
                         df, 
-                        path=[df.columns[1], df.columns[2]], # Região > Tipo
+                        path=[df.columns[1], df.columns[2]],
                         color=df.columns[1], 
                         color_discrete_sequence=CORES_TREEMAP
                     )
                     fig.update_traces(
                         root_color="lightgrey",
-                        # Mantém o texto clarinho (#EEEEEE) para leitura em fundo escuro
                         textfont=dict(family="Coolvetica", size=20, color='#EEEEEE'),
                         textinfo="label+percent parent"
                     )
                     fig.update_layout(margin=dict(t=0, l=0, r=0, b=0))
 
-                # 2. Censo/Contagem (Donut Chart)
                 elif "População" in escolha_menu or "Censo" in escolha_menu or "Total" in escolha_menu:
                     col_nome = df.columns[0]
                     col_valor = df.columns[1]
@@ -419,7 +379,6 @@ with tab2:
                     )
                     fig.update_traces(textinfo='value+percent')
 
-                # 3. TODOS os outros (Barras Coloridas + Texto Dentro)
                 else:
                     try:
                         col_x = df.columns[0] 
@@ -440,7 +399,6 @@ with tab2:
                     except:
                         st.info("Visualização gráfica não disponível para estes dados.")
 
-                # --- ESTILIZAÇÃO GERAL ---
                 if fig:
                     if "Catálogo" not in escolha_menu:
                         fig.update_layout(
@@ -467,7 +425,6 @@ with tab2:
         else:
             st.warning("Nenhum registro localizado ou erro na consulta.")
 
-# --- ABAS 3, 4, 5 ---
 with tab3:
     st.markdown("### MODELO CONCEITUAL")
     if os.path.exists("modelo_conceitual.jpg"):
