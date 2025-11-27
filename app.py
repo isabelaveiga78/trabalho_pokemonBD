@@ -4,6 +4,7 @@ import pandas as pd
 import base64
 import os
 import plotly.express as px
+import ssl
 
 st.set_page_config(
     page_title="Caracterização Pokémon", 
@@ -247,13 +248,20 @@ CONSULTAS_INFO = {
 
 def get_data(query):
     try:
+        # --- CONFIGURAÇÃO DE SSL ---
+        # Isso cria um contexto que aceita a criptografia mas não exige certificado local
+        # É o truque para funcionar na nuvem sem dor de cabeça
         conn = pymysql.connect(
             host=st.secrets["db_host"],
             user=st.secrets["db_user"],
             password=st.secrets["db_password"],
             database=st.secrets["db_name"],
             port=4000,
-            cursorclass=pymysql.cursors.DictCursor
+            cursorclass=pymysql.cursors.DictCursor,
+            ssl={
+                "check_hostname": False,
+                "verify_mode": ssl.CERT_NONE
+            }
         )
         cursor = conn.cursor()
         cursor.execute(query)
