@@ -435,21 +435,21 @@ with tab2:
 
 with tab3:
     st.markdown("### MODELO CONCEITUAL")
-    if os.path.exists("modelo_conceitual.jpg"):
+    if os.path.exists("Conceitual_new.png"):
         st.markdown('<div class="tech-img">', unsafe_allow_html=True)
-        st.image("modelo_conceitual.jpg", use_container_width=True)
+        st.image("Conceitual_new.png", use_container_width=True)
         st.markdown('</div>', unsafe_allow_html=True)
     else:
-        st.info("Imagem 'modelo_conceitual.jpg' não encontrada no diretório.")
+        st.info("Imagem 'Conceitual_new.png' não encontrada no diretório.")
 
 with tab4:
     st.markdown("### MODELO LÓGICO")
-    if os.path.exists("modelo_logico.jpg"):
+    if os.path.exists("Lógico_new.png"):
         st.markdown('<div class="tech-img">', unsafe_allow_html=True)
-        st.image("modelo_logico.jpg", use_container_width=True)
+        st.image("Lógico_new.png", use_container_width=True)
         st.markdown('</div>', unsafe_allow_html=True)
     else:
-        st.info("Imagem 'modelo_logico.jpg' não encontrada no diretório.")
+        st.info("Imagem 'Lógico_new.png' não encontrada no diretório.")
 
 with tab5:
     st.markdown("### MODELO FÍSICO")
@@ -511,5 +511,6 @@ CREATE TABLE Geracao (
 
     """
     st.code(codigo_sql, language="sql")
+
 
 
