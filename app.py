@@ -226,7 +226,7 @@ CONSULTAS_INFO = {
     },
     "Exemplos de Cada Elemento": {
         "subtitulo": "Uma listagem para conferir todos os Tipos existentes no banco e um exemplo de Pokémon para cada um.",
-        "sql": "SELECT T.Nome_pt as Tipo, P.Nome as Exemplo FROM Tipo T LEFT JOIN Pertence PT ON T.Nome = PT.Tipo LEFT JOIN Pokemon P ON PT.Pokemon = P.Nome GROUP BY T.Nome_pt"
+        "sql": "SELECT T.Nome_pt as Tipo, MAX(P.Nome) as Exemplo FROM Tipo T LEFT JOIN Pertence PT ON T.Nome = PT.Tipo LEFT JOIN Pokemon P ON PT.Pokemon = P.Nome GROUP BY T.Nome_pt"
     },
     "Os Tipos Mais Resistentes": {
         "subtitulo": "Uma análise de Defesa: quais elementos têm, em média, a maior capacidade de proteção?",
@@ -511,6 +511,7 @@ CREATE TABLE Geracao (
 
     """
     st.code(codigo_sql, language="sql")
+
 
 
 
