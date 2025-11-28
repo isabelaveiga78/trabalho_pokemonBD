@@ -226,7 +226,7 @@ CONSULTAS_INFO = {
     },
     "Exemplos de Cada Combinação de Elemento": {
         "subtitulo": "Uma listagem para conferir todas as combinações de Tipos existentes e um exemplo de Pokémon para cada um.",
-        "sql": "SELECT T1.Nome_pt as 'Tipo 1', T2.Nome_pt as 'Tipo 2', MAX(PT1.Pokemon) as Exemplo FROM (Tipo T1 JOIN Tipo T2 ON T1.Nome > T2.Nome) LEFT JOIN Pertence PT1 ON T1.Nome = PT1.Tipo LEFT JOIN Pertence PT2 ON T2.Nome = PT2.Tipo and PT1.Pokemon = PT2.Pokemon GROUP BY T1.Nome_pt, T2.Nome_pt"
+        "sql": "SELECT T1.Nome_pt as 'Tipo 1', T2.Nome_pt as 'Tipo 2', MAX(PT1.Pokemon) as Exemplo FROM (Tipo T1 JOIN Tipo T2 ON T1.Nome > T2.Nome) LEFT JOIN (Pertence PT1 ON T1.Nome = PT1.Tipo JOIN Pertence PT2 ON PT1.Pokemon = PT2.Pokemon) ON T1.Nome = PT1.Tipo and T2.Nome = PT2.Tipo GROUP BY T1.Nome_pt, T2.Nome_pt"
     },
     "Os Tipos Mais Resistentes": {
         "subtitulo": "Uma análise de Defesa: quais elementos têm, em média, a maior capacidade de proteção?",
@@ -511,6 +511,7 @@ CREATE TABLE Geracao (
 
     """
     st.code(codigo_sql, language="sql")
+
 
 
 
