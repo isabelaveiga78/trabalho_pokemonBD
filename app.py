@@ -224,9 +224,9 @@ CONSULTAS_INFO = {
         "subtitulo": "Filtramos apenas os Pokémons que possuem Ataque superior à média global de todos os registros.",
         "sql": "SELECT Nome, Ataque FROM Pokemon WHERE Ataque > (SELECT AVG(Ataque) FROM Pokemon) ORDER BY Ataque DESC"
     },
-    "Exemplos de Cada Elemento": {
-        "subtitulo": "Uma listagem para conferir todos os Tipos existentes no banco e um exemplo de Pokémon para cada um.",
-        "sql": "SELECT T.Nome_pt as Tipo, MAX(P.Nome) as Exemplo FROM Tipo T LEFT JOIN Pertence PT ON T.Nome = PT.Tipo LEFT JOIN Pokemon P ON PT.Pokemon = P.Nome GROUP BY T.Nome_pt"
+    "Exemplos de Cada Combinação de Elemento": {
+        "subtitulo": "Uma listagem para conferir todas as combinações de Tipos existentes e um exemplo de Pokémon para cada um.",
+        "sql": "SELECT T1.Nome_pt as 'Tipo 1', T2.Nome_pt as 'Tipo 2', MAX(PT1.Nome) as Exemplo FROM (Tipo T1 JOIN Tipo T2 ON T1.Nome > T2.Nome) LEFT JOIN Pertence PT1 ON T1.Nome = PT1.Tipo LEFT JOIN Pertence PT2 ON T2.Nome = PT2.Tipo and PT1.Pokemon = PT2.Pokemon GROUP BY T1.Nome_pt, T2.Nome_pt"
     },
     "Os Tipos Mais Resistentes": {
         "subtitulo": "Uma análise de Defesa: quais elementos têm, em média, a maior capacidade de proteção?",
@@ -511,6 +511,7 @@ CREATE TABLE Geracao (
 
     """
     st.code(codigo_sql, language="sql")
+
 
 
 
