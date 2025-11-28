@@ -214,11 +214,11 @@ st.markdown("""
 CONSULTAS_INFO = {
     "Catálogo Completo": {
         "subtitulo": "Uma lista geral unindo as principais informações: Nome, onde vive (Região) e qual seu elemento (Tipo).",
-        "sql": "SELECT P.Nome, G.Regiao, T.Nome as Tipo FROM Pokemon P JOIN Geracao G ON P.idGeracao = G.Numero JOIN Pertence PT ON P.Numero = PT.Numero JOIN Tipo T ON PT.Nome = T.Nome"
+        "sql": "SELECT P.Nome, G.Regiao, T.Nome_pt as Tipo FROM Pokemon P JOIN Geracao G ON P.idGeracao = G.Numero JOIN Pertence PT ON P.Nome = PT.Pokemon JOIN Tipo T ON PT.Tipo = T.Nome"
     },
     "Ranking de Força por Tipo": {
         "subtitulo": "Calculamos a média de ataque de cada elemento. Qual tipo de Pokémon costuma ser fisicamente mais forte?",
-        "sql": "SELECT T.Nome as Tipo, ROUND(AVG(P.Ataque),2) as Media_Ataque FROM Tipo T JOIN Pertence PT ON T.Nome = PT.Nome JOIN Pokemon P ON PT.Numero = P.Numero GROUP BY T.Nome ORDER BY Media_Ataque DESC"
+        "sql": "SELECT T.Nome_pt as Tipo, ROUND(AVG(P.Ataque),2) as Media_Ataque FROM Tipo T JOIN Pertence PT ON T.Nome = PT.Tipo JOIN Pokemon P ON PT.Pokemon = P.Nome GROUP BY T.Nome_pt ORDER BY Media_Ataque DESC"
     },
     "A Elite (Acima da Média)": {
         "subtitulo": "Filtramos apenas os Pokémons que possuem Ataque superior à média global de todos os registros.",
@@ -226,11 +226,11 @@ CONSULTAS_INFO = {
     },
     "Exemplos de Cada Elemento": {
         "subtitulo": "Uma listagem para conferir todos os Tipos existentes no banco e um exemplo de Pokémon para cada um.",
-        "sql": "SELECT T.Nome as Tipo, P.Nome as Exemplo FROM Tipo T LEFT JOIN Pertence PT ON T.Nome = PT.Nome LEFT JOIN Pokemon P ON PT.Numero = P.Numero GROUP BY T.Nome"
+        "sql": "SELECT T.Nome_pt as Tipo, P.Nome as Exemplo FROM Tipo T LEFT JOIN Pertence PT ON T.Nome = PT.Tipo LEFT JOIN Pokemon P ON PT.Pokemon = P.Nome GROUP BY T.Nome_pt"
     },
     "Os Tipos Mais Resistentes": {
         "subtitulo": "Uma análise de Defesa: quais elementos têm, em média, a maior capacidade de proteção?",
-        "sql": "SELECT T.Nome, ROUND(AVG(P.Defesa),2) as Media_Defesa FROM Tipo T JOIN Pertence PT ON T.Nome = PT.Nome JOIN Pokemon P ON PT.Numero = P.Numero GROUP BY T.Nome HAVING AVG(P.Defesa) > (SELECT AVG(Defesa) FROM Pokemon) ORDER BY Media_Defesa DESC"
+        "sql": "SELECT T.Nome_pt, ROUND(AVG(P.Defesa),2) as Media_Defesa FROM Tipo T JOIN Pertence PT ON T.Nome = PT.Tipo JOIN Pokemon P ON PT.Pokemon = P.Nome GROUP BY T.Nome HAVING AVG(P.Defesa) > (SELECT AVG(Defesa) FROM Pokemon) ORDER BY Media_Defesa DESC"
     },
     "O Campeão de Cada Região": {
         "subtitulo": "Identificamos o Pokémon mais forte (maior ataque) de cada uma das regiões geográficas do jogo.",
@@ -501,3 +501,4 @@ CREATE TABLE Efetividade (
 );
     """
     st.code(codigo_sql, language="sql")
+
