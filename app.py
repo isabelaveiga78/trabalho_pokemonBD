@@ -248,9 +248,6 @@ CONSULTAS_INFO = {
 
 def get_data(query):
     try:
-        # --- CONFIGURAÇÃO DE SSL ---
-        # Isso cria um contexto que aceita a criptografia mas não exige certificado local
-        # É o truque para funcionar na nuvem sem dor de cabeça
         conn = pymysql.connect(
             host=st.secrets["db_host"],
             user=st.secrets["db_user"],
@@ -511,6 +508,7 @@ CREATE TABLE Geracao (
 
     """
     st.code(codigo_sql, language="sql")
+
 
 
 
